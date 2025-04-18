@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemma3 Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout_style.css')}}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="main-container">
+        <nav class="sidebar">
+            <h3>대화 목록</h3>
+            <ul class="tab-list" id="tab-list">
+                {% for tab in tabs %}
+                <li class="{% if tab.id == active_tab_id %}active{% endif %}" data-tab-id="{{ tab.id }}">
+                    {{ tab.title }}
+                </li>
+                {% endfor %}
+            </ul>
+            <button class="new-tab-btn" id="new-tab-btn">+ 새 대화</button>
+        </nav>
+        <section class="content">
+            {% block content %}{% endblock %}
+        </section>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabList = document.getElementById('tab-list');
+            if (tabList) {
+                tabList.addEventListener('click', function(e) {
+                    if (e.target && e.target.matches('li[data-tab-id]')) {
+                        const tabId = e.target.getAttribute('data-tab-id');
+                        window.location.href = '/?tab_id=' + tabId;
+                    }
+                });
+            }
+            const newTabBtn = document.getElementById('new-tab-btn');
+            if (newTabBtn) {
+                newTabBtn.addEventListener('click', function() {
+                    window.location.href = '/new_tab';
+                });
+            }
+        });
+    </script>
+    {% block script %}{% endblock %}
+</body>
+</html>
